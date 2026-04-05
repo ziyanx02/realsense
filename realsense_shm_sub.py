@@ -4,8 +4,8 @@ import os
 import struct
 import numpy as np
 
-WIDTH = 640
-HEIGHT = 480
+WIDTH = 424
+HEIGHT = 240
 CHANNELS = 3
 IMG_SIZE = WIDTH * HEIGHT * CHANNELS
 SEQ_SIZE = 8

@@ -9,8 +9,8 @@
 #include <cstring>
 #include <csignal>
 
-constexpr int WIDTH = 640;
-constexpr int HEIGHT = 480;
+constexpr int WIDTH = 424;
+constexpr int HEIGHT = 240;
 constexpr int CHANNELS = 3;
 constexpr size_t IMG_SIZE = WIDTH * HEIGHT * CHANNELS;
 

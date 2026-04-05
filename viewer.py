@@ -1,4 +1,5 @@
 import cv2
+import math
 import numpy as np
 import time
 from realsense_shm_sub import CamReader
@@ -6,6 +7,8 @@ from realsense_shm_sub import CamReader
 reader = CamReader()
 serials = reader.serials
 print(f"Found cameras: {serials}")
+
+WINDOW_NAME = f"RealSense x{len(serials)} (shm)"
 
 prev_times = {s: time.perf_counter() for s in serials}
 fps_values = {s: 0.0 for s in serials}
@@ -57,14 +60,24 @@ while True:
         )
         frames_to_show.append(image_bgr)
 
-    if len(frames_to_show) == 2:
-        combined = np.hstack(frames_to_show)
-        cv2.imshow("RealSense x2 (shm)", combined)
+    if frames_to_show:
+        n = len(frames_to_show)
+        if n == 1:
+            combined = frames_to_show[0]
+        else:
+            cols = math.ceil(math.sqrt(n))
+            rows = math.ceil(n / cols)
+            h, w = frames_to_show[0].shape[:2]
+            blank = np.zeros((h, w, 3), dtype=np.uint8)
+            padded = frames_to_show + [blank] * (rows * cols - n)
+            row_imgs = [np.hstack(padded[r * cols:(r + 1) * cols]) for r in range(rows)]
+            combined = np.vstack(row_imgs)
+        cv2.imshow(WINDOW_NAME, combined)
         window_created = True
 
     if window_created:
         key = cv2.waitKey(1)
-        if key == 27 or cv2.getWindowProperty("RealSense x2 (shm)", cv2.WND_PROP_VISIBLE) < 1:
+        if key == 27 or cv2.getWindowProperty(WINDOW_NAME, cv2.WND_PROP_VISIBLE) < 1:
             break
 
 cv2.destroyAllWindows()
