@@ -29,6 +29,7 @@ cd librealsense
 mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j$(nproc)
+make install
 ```
 
 Install udev rules manually:
